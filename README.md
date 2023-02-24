@@ -1,4 +1,5 @@
-# extract-bill-information
+# Extract Bill Information
 
 1. Background removal
-https://github.com/danielgatis/rembg
+- Using **rembg** a library to remove images background by ***danielgatis***
+- Source: [rembg](https://github.com/danielgatis/rembg)
