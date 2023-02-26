@@ -7,7 +7,7 @@ def check_output_folder(folder):
         os.mkdir(folder)
 
 
-def progress_bar(current, total, bar_length=50):
+def progress_bar(current, total, bar_length=100):
     """ Progress bar - Thanh tiến trình """
     fraction = current / total
 
