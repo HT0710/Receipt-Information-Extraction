@@ -1,13 +1,14 @@
 from rotation.CRAFT import model, net
 from rotation.utils import rotate_box
 import numpy as np
-
+import cv2
+import os
 
 def run(image_path, output_folder, cuda=False):
     image = model.loadImage(image_path)
 
     craft = net.net_setup(cuda)
-    bboxes, polys, score_text = net.test_net(craft, image, 0.7, 0.4, 0.4, cuda, False, None)
+    bboxes, _, _ = net.test_net(craft, image, 0.7, 0.4, 0.4, cuda, False, None)
 
     if bboxes is not []:
         ratios = []
@@ -23,7 +24,7 @@ def run(image_path, output_folder, cuda=False):
         mean_ratio = np.mean(ratios)
         if mean_ratio >= 1:
             image, bboxes = rotate_box(image, bboxes, None, True, False)
-
-    bboxes, polys, score_text = net.test_net(craft, image, 0.7, 0.4, 0.4, cuda, False, None)
-
-    model.saveResult(image_path, image[:, :, ::-1], polys, dirname=output_folder)
+    
+    filename = image_path.split('/')[-1]
+    cv2.imwrite(f"./{output_folder}/{filename}", image[:, :, ::-1])
+    # model.saveResult(image_path, image[:, :, ::-1], None, dirname=output_folder)
