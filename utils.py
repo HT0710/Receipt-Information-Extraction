@@ -17,3 +17,7 @@ def progress_bar(current, total, bar_length=50):
     ending = '\n' if current == total else '\r'
 
     print(f'Progress {current}/{total} : [{arrow}{padding}] {int(fraction * 100)}%', end=ending)
+
+
+def output_exist(input_path, output_path):
+    return True if os.path.exists(f'{output_path}/{input_path}') else False
