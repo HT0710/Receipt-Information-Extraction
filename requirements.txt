@@ -1,0 +1,6 @@
+rembg
+torch
+torchvision
+opencv-python
+scikit-image
+scipy
