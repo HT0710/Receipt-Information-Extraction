@@ -10,3 +10,4 @@
 - Using **CRAFT** text detector to get the text direction
 - Rotate all horizontal bill to vertical (90 rotate)
 - Roate all upside down bill to the correct direction (180 rotate)
+- Source: [CRAFT-pytorch](https://github.com/clovaai/CRAFT-pytorch)
