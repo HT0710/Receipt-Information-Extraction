@@ -1,33 +1,16 @@
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-
+import math
+import os
 from collections import namedtuple
 
-import torch
-import torch.nn as nn
-import torch.nn.init as init
-from torchvision import models
-from torchvision.models.vgg import model_urls
-
-# -*- coding: utf-8 -*-
-import numpy as np
 import cv2
-import math
-
-# -*- coding: utf-8 -*-
-import os
 import numpy as np
-import cv2
-# -*- coding: utf-8 -*-
-import numpy as np
-from skimage import io
-import cv2
-# -*- coding: utf-8 -*-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.autograd import Variable
+import torch.nn.init as init
+from skimage import io
+from torchvision import models
+from torchvision.models.vgg import model_urls
 
 
 class RefineNet(nn.Module):

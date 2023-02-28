@@ -1,5 +1,5 @@
-import numpy as np
 import cv2
+import numpy as np
 
 
 def rotate_box(img, bboxes, degree, rotate_90, flip):

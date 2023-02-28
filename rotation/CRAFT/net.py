@@ -1,11 +1,13 @@
-import torch.backends.cudnn as cudnn
+import time
 from collections import OrderedDict
-from rotation.CRAFT import model
+
+import cv2
 import numpy as np
 import torch
-import time
-import cv2
+import torch.backends.cudnn as cudnn
+from torch.autograd import Variable
 
+from rotation.CRAFT import model
 
 pretrained = 'rotation/CRAFT/weights/craft_mlt_25k.pth'
 
@@ -32,7 +34,7 @@ def test_net(net, image, text_threshold, link_threshold, low_text, cuda, poly, r
     # preprocessing
     x = model.normalizeMeanVariance(img_resized)
     x = torch.from_numpy(x).permute(2, 0, 1)  # [h, w, c] to [c, h, w]
-    x = model.Variable(x.unsqueeze(0))  # [c, h, w] to [b, c, h, w]
+    x = Variable(x.unsqueeze(0))  # [c, h, w] to [b, c, h, w]
     if cuda:
         x = x.cuda()
 
@@ -74,8 +76,10 @@ def test_net(net, image, text_threshold, link_threshold, low_text, cuda, poly, r
     return boxes, polys, ret_score_text
 
 
-def net_setup(cuda):
+def net_setup():
     net = model.CRAFT()
+
+    cuda = torch.cuda.is_available()
     if cuda:
         net.load_state_dict(copyStateDict(torch.load(pretrained)))
         net = net.cuda()
@@ -83,5 +87,7 @@ def net_setup(cuda):
         cudnn.benchmark = False
     else:
         net.load_state_dict(copyStateDict(torch.load(pretrained, map_location='cpu')))
+
     net.eval()
-    return net
+
+    return net, cuda
