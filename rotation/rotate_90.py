@@ -1,4 +1,4 @@
-import cv2
+from skimage import io
 import numpy as np
 
 from rotation.CRAFT import model, net
@@ -27,5 +27,4 @@ def run(image_path, output_folder):
             image, bboxes = rotate_box(image, bboxes, None, True, False)
 
     filename = image_path.split('/')[-1]
-    cv2.imwrite(f"./{output_folder}/{filename}", image[:, :, ::-1])
-    # model.saveResult(image_path, image[:, :, ::-1], None, dirname=output_folder)
+    io.imsave(f"./{output_folder}/{filename}", image[:,:,0])
