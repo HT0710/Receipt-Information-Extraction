@@ -36,7 +36,7 @@ class PROGRESS:
 		prev = time.time()
 		ps = (1 / (prev - self.__start)) if self.__start != 0 else 0
 		self.__recently.pop(0) if len(self.__recently) >= 100 else None
-		self.__recently.append(ps)
+		self.__recently.append(ps) if ps <= 100 else None
 		self.__start = prev
 		return np.mean(self.__recently)
 		
