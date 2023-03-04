@@ -9,8 +9,8 @@ from torch.autograd import Variable
 
 from rotation.CRAFT import model
 
-pretrained = 'rotation/CRAFT/weights/craft_mlt_25k.pth'
-
+net_pretrained = 'rotation/CRAFT/weights/craft_mlt_25k.pth'
+refine_pretrained = 'rotation/CRAFT/weights/craft_refiner_CTW1500.pth'
 
 def copyStateDict(state_dict):
     if list(state_dict.keys())[0].startswith("module"):
@@ -75,19 +75,22 @@ def test_net(net, image, text_threshold, link_threshold, low_text, cuda, poly, r
 
     return boxes, polys, ret_score_text
 
-
-def net_setup():
-    net = model.CRAFT()
-
-    cuda = torch.cuda.is_available()
+def model_setup(model, pretrained, cuda):
     if cuda:
-        net.load_state_dict(copyStateDict(torch.load(pretrained)))
-        net = net.cuda()
-        net = torch.nn.DataParallel(net)
-        cudnn.benchmark = False
+        model.load_state_dict(copyStateDict(torch.load(pretrained)))
+        model = model.cuda()
+        model = torch.nn.DataParallel(model)
     else:
-        net.load_state_dict(copyStateDict(torch.load(pretrained, map_location='cpu')))
+         model.load_state_dict(copyStateDict(torch.load(pretrained, map_location='cpu')))
+    model.eval()
+    return model
+    
+def setup():
+    net = model.CRAFT()
+    refine_net = model.RefineNet()
+    is_cuda = torch.cuda.is_available()
+    
+    net = model_setup(net, net_pretrained, is_cuda)
+    refine_net = model_setup(refine_net, refine_pretrained, is_cuda)
 
-    net.eval()
-
-    return net, cuda
+    return net, refine_net, is_cuda

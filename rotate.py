@@ -1,28 +1,45 @@
 import os
-
+from skimage import io
 from rotation import rotate_90
-from utils import check_output_folder, PROGRESS, output_exist
+from utils import check_output_folder, PROGRESS, output_exist, crop_background
+from rotation.CRAFT import model
+from rotation.utils import craft, align_box
 
-raw_folder = 'data/background_removed'
+
+input_folder = 'data/background_removed'
 output_folder = 'data/rotated'
 
 
 def main():
-    check_output_folder(output_folder)
+	check_output_folder(output_folder)
 
-    bar = PROGRESS()
-    for path, dirs, files in os.walk(raw_folder):
-        total = len(files)
-        for i, file in enumerate(files, 1):
-            if output_exist(file, output_folder):
-                continue
+	files = os.listdir(input_folder)
+	
+	prog_bar = PROGRESS(files)
+	for filename in files:
+		input_path = os.path.join(input_folder, filename)
+		output_path = os.path.join(output_folder, filename)
+		
+		if not output_exist(output_path):
+			img_0 = io.imread(input_path)
+			
+			img_1 = model.loadImage(img_0) # refine image
 
-            input_path = f'{raw_folder}/{file}'
+			bboxes = craft(img_1)
+			img_2 = rotate_90.run(img_1, bboxes)
 
-            rotate_90.run(input_path, output_folder)
+			bboxes = craft(img_2)
+			img_3, is_align = align_box(img_2, bboxes, skew_threshold=0)
+			
+			#bboxes = craft(img_3) if is_align else bboxes
+			#img_4 = rotate_180.run(img_3, bboxes)
 
-            bar.show(i, total)
+			output = crop_background(img_3, grayscale=True)
+
+			io.imsave(output_path, output)
+
+		prog_bar.update()
 
 
 if __name__ == '__main__':
-    main()
+	main()

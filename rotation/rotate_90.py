@@ -5,12 +5,7 @@ from rotation.CRAFT import model, net
 from rotation.utils import rotate_box
 
 
-def run(image_path, output_folder):
-    image = model.loadImage(image_path)
-
-    craft, cuda = net.net_setup()
-    bboxes, _, _ = net.test_net(craft, image, 0.7, 0.4, 0.4, cuda, False, None)
-
+def run(image, bboxes):
     if bboxes is not []:
         ratios = []
         for box in bboxes:
@@ -25,6 +20,5 @@ def run(image_path, output_folder):
         mean_ratio = np.mean(ratios)
         if mean_ratio >= 1:
             image, bboxes = rotate_box(image, bboxes, None, True, False)
-
-    filename = image_path.split('/')[-1]
-    io.imsave(f"./{output_folder}/{filename}", image[:,:,0])
+            
+    return image
