@@ -3,6 +3,15 @@ import numpy as np
 import imutils	
 import math
 
+from rotation.CRAFT import net
+
+
+model, refine_net, cuda = net.setup()
+def craft(image):
+	bboxes, _, _ = net.test_net(model, image, 0.7, 0.4, 0.4, cuda, True, refine_net)
+	return bboxes
+	
+
 def rotate_box(img, bboxes, degree, rotate_90, flip):
 	h, w = img.shape[:2]
 	if degree:
@@ -19,6 +28,7 @@ def rotate_box(img, bboxes, degree, rotate_90, flip):
 		new_img = cv2.rotate(img, cv2.ROTATE_180)
 		return new_img, np.array(new_bboxes)
 	return img, bboxes
+
 
 def align_box(image, bboxes, skew_threshold=5, top_box=3):
 	vertical_vector = [0, -1]
