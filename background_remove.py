@@ -22,9 +22,9 @@ def main():
 
 			bg_removed = remove(img)
 			
-			output = crop_background(bg_removed)
+			output = crop_background(bg_removed, grayscale=True)
 
-			io.imsave(output_path, output[:,:,0])
+			io.imsave(output_path, output)
 		
 		prog_bar.update()
 		
