@@ -1,7 +1,8 @@
-rembg
+rembg[gpu]
 torch
 torchvision
 opencv-python
+scikit-learn
 scikit-image
 scipy
 imutils
