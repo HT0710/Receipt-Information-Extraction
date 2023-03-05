@@ -12,7 +12,7 @@ def output_exist(output_path):
 
 
 class PROGRESS:
-	"""Progess bar"""
+	"""Progress bar"""
 	bar_length = 50
 	
 	def __init__(self, i_list):
