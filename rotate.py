@@ -1,6 +1,6 @@
 import os
 from skimage import io
-from rotation import rotate_90
+from rotation import rotate_90, rotate_180
 from utils import output_exist, PROGRESS, crop_background
 from rotation.CRAFT import model
 from rotation.utils import craft, align_box
@@ -24,18 +24,17 @@ def main():
 		if not output_exist(output_path):
 			img_0 = io.imread(input_path)
 			
-			img_1 = model.loadImage(img_0) # refine image
+			img_1 = model.loadImage(img_0) # pre-format image
 
 			bboxes = craft(img_1)
 			img_2 = rotate_90.run(img_1, bboxes)
 
 			bboxes = craft(img_2)
-			img_3, is_align = align_box(img_2, bboxes, skew_threshold=0)
+			img_3, is_align = align_box(img_2, bboxes, skew_threshold=1)
 			
-			#bboxes = craft(img_3) if is_align else bboxes
-			#img_4 = rotate_180.run(img_3, bboxes)
+			img_4 = rotate_180.run(img_3)
 
-			output = crop_background(img_3, grayscale=True)
+			output = crop_background(img_4, grayscale=True)
 
 			io.imsave(output_path, output)
 

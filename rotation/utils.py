@@ -8,7 +8,7 @@ from rotation.CRAFT import net
 
 model, refine_net, cuda = net.setup()
 def craft(image):
-	bboxes, _, _ = net.test_net(model, image, 0.7, 0.4, 0.4, cuda, True, refine_net)
+	bboxes, _, _ = net.test_net(model, image, 0.7, 0.4, 0.4, cuda, False, refine_net)
 	return bboxes
 	
 
