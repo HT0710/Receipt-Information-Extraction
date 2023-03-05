@@ -1,14 +1,15 @@
 import os
 from skimage import io
 from rembg import remove
-from utils import check_output_folder, PROGRESS, output_exist, crop_background
+from utils import output_exist, PROGRESS, crop_background
 
 input_folder = 'data/raw'
 output_folder = 'data/background_removed'
 
 
 def main():
-	check_output_folder(output_folder)
+	if not output_exist(output_folder):
+		os.mkdir(output_folder)
 	
 	files = os.listdir(input_folder)
 	

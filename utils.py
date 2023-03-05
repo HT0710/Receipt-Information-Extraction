@@ -6,15 +6,9 @@ from skimage import io
 import cv2
 
 
-def check_output_folder(folder):
-	"""Create output folder if not exist"""
-	os.mkdir(folder) if not os.path.exists(folder) else None
-		
-
-
 def output_exist(output_path):
 	"""Check if output is already exist"""
-	return True if os.path.exists(output_path) else False
+	return os.path.exists(output_path)
 
 
 class PROGRESS:

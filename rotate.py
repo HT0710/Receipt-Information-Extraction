@@ -1,7 +1,7 @@
 import os
 from skimage import io
 from rotation import rotate_90
-from utils import check_output_folder, PROGRESS, output_exist, crop_background
+from utils import output_exist, PROGRESS, crop_background
 from rotation.CRAFT import model
 from rotation.utils import craft, align_box
 
@@ -11,7 +11,8 @@ output_folder = 'data/rotated'
 
 
 def main():
-	check_output_folder(output_folder)
+	if not output_exist(output_folder):
+		os.mkdir(output_folder)
 
 	files = os.listdir(input_folder)
 	
