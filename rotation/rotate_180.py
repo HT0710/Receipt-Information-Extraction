@@ -8,8 +8,8 @@ with open('weights/rotate_180.pkl', 'rb') as f:
 
 def run(image):
 	img_arr = color.rgb2gray(image)
-	img_arr = transform.resize(img_arr, (180,180))
-	img_arr = np.array(img_arr).reshape(180*180)
+	img_arr = transform.resize(img_arr, (128,128))
+	img_arr = np.array(img_arr).reshape(128*128)
 	predicted = model.predict([img_arr])
 	
 	if predicted == 0:

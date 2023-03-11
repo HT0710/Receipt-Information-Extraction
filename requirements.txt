@@ -1,8 +1,11 @@
 rembg[gpu]
-torch
-torchvision
+torch=1.11
+torchvision=0.12
 opencv-python
-scikit-learn
+scikit-learn=1.2.1
 scikit-image
 scipy
 imutils
+PyYAML
+einops
+gdown
