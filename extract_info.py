@@ -6,13 +6,14 @@ from PIL import Image
 
 # load vietocr
 config = Config.load_config_from_name("vgg_transformer")
+config['device'] = 'cuda:0'  # config['device'] = 'cpu'
 detector = Predictor(config)
 
 
 def main():
 	img_path = 'data/rotated/bhx_5bcac72d2869ee37b778.jpg'
 
-	_image = io.imread(img_path, True)
+	_image = io.imread(img_path)
 
 	bboxes = craft(model.loadImage(_image)) # craft
 	
