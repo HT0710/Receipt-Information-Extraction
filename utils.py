@@ -4,6 +4,7 @@ import datetime
 import numpy as np
 from skimage import io
 import cv2
+import yaml
 
 
 def output_exist(output_path):
@@ -11,7 +12,7 @@ def output_exist(output_path):
 	return os.path.exists(output_path)
 
 
-class PROGRESS:
+class Progress:
 	"""Progress bar"""
 	bar_length = 50
 	
@@ -42,8 +43,8 @@ class PROGRESS:
 
 	def __bar(self):
 		percent = self.current / self.total
-		completed = int(percent * PROGRESS.bar_length) * '█'
-		padding = int(PROGRESS.bar_length - len(completed)) * '.'
+		completed = int(percent * Progress.bar_length) * '█'
+		padding = int(Progress.bar_length - len(completed)) * '.'
 		prog_line = f'Progress: {self.current}/{self.total} |{completed}{padding}| {int(percent*100)}% in {self.__time_calc()}s     '
 		return prog_line
 	
@@ -65,3 +66,10 @@ def crop_background(image, grayscale=False):
 	x, y, w, h = cv2.boundingRect(thresholded)
 	output = (gray if grayscale else image)[y:y+h, x:x+w]
 	return output
+
+
+def load_config(config_file: str='config.yaml'):
+	"""Load config file"""
+	with open(config_file) as f:
+		config = yaml.full_load(f)
+	return config

@@ -1,7 +1,7 @@
 import os
 from skimage import io
 from rembg import remove
-from utils import output_exist, PROGRESS, crop_background
+from utils import output_exist, Progress, crop_background
 
 input_folder = 'data/raw'
 output_folder = 'data/background_removed'
@@ -13,7 +13,7 @@ def main():
 	
 	files = os.listdir(input_folder)
 	
-	prog_bar = PROGRESS(files)
+	prog_bar = Progress(files)
 	for filename in files:
 		input_path = os.path.join(input_folder, filename)
 		output_path = os.path.join(output_folder, filename)
