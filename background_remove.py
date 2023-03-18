@@ -1,12 +1,13 @@
 import os
 from skimage import io
 from rembg import remove
-from utils import output_exist, Progress, crop_background
+from utils import output_exist, Progress, crop_background, measure
 
 input_folder = 'data/raw'
 output_folder = 'data/background_removed'
 
 
+@measure
 def main():
 	if not output_exist(output_folder):
 		os.mkdir(output_folder)
@@ -26,7 +27,6 @@ def main():
 			output = crop_background(bg_removed, grayscale=True)
 
 			io.imsave(output_path, output)
-		
 		prog_bar.update()
 		
 

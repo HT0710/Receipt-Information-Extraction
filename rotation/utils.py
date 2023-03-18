@@ -1,16 +1,22 @@
 import cv2
 import numpy as np
-import imutils	
+import imutils
 import math
 
 from rotation.CRAFT import net
 
 
-model, refine_net, cuda = net.setup()
-def craft(image):
-	bboxes, _, _ = net.test_net(model, image, 0.7, 0.4, 0.4, cuda, False, refine_net)
-	return bboxes
-	
+class Craft:
+	def __init__(self, device):
+		model, refine_net, cuda = net.setup(device)
+		self.model = model
+		self.refine_net = refine_net
+		self.cuda = cuda
+
+	def __call__(self, image):
+		bboxes, _, _ = net.test_net(self.model, image, 0.7, 0.4, 0.4, self.cuda, False, self.refine_net)
+		return bboxes
+
 
 def rotate_box(img, bboxes, degree, rotate_90, flip):
 	h, w = img.shape[:2]

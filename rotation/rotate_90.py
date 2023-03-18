@@ -1,7 +1,4 @@
-from skimage import io
 import numpy as np
-
-from rotation.CRAFT import model, net
 from rotation.utils import rotate_box
 
 

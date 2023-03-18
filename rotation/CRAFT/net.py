@@ -85,12 +85,12 @@ def model_setup(model, pretrained, cuda):
     model.eval()
     return model
     
-def setup():
+def setup(device):
     net = model.CRAFT()
     refine_net = model.RefineNet()
-    is_cuda = torch.cuda.is_available()
+    cuda = True if (device == 'cuda' and torch.cuda.is_available()) else False
     
-    net = model_setup(net, net_pretrained, is_cuda)
-    refine_net = model_setup(refine_net, refine_pretrained, is_cuda)
+    net = model_setup(net, net_pretrained, cuda)
+    refine_net = model_setup(refine_net, refine_pretrained, cuda)
 
-    return net, refine_net, is_cuda
+    return net, refine_net, cuda

@@ -5,7 +5,7 @@ from text_extraction.vietocr import Config, Predictor
 from PIL import Image
 
 # load vietocr
-config = Config.load_config_from_name("vgg_transformer")
+config = Config.load_config_from_name("vgg_seq2seq")
 config['device'] = 'cuda:0'  # config['device'] = 'cpu'
 detector = Predictor(config)
 
