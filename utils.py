@@ -1,10 +1,11 @@
 import os
-import time
+from time import time
 import datetime
 import numpy as np
 from skimage import io
 import cv2
 import yaml
+from functools import wraps
 
 
 def output_exist(output_path):
@@ -14,45 +15,51 @@ def output_exist(output_path):
 
 class Progress:
 	"""Progress bar"""
-	bar_length = 50
-	
 	def __init__(self, i_list):
 		self.total = len(i_list)
 		self.current = 0
+		self.__bar_length = 33
+		self.__begin_time = time()
 		self.__start = 0
 		self.__recently = []
 	
-	@classmethod
-	def set_bar_length(cls, length):
-		"""Set new bar length (Default: 50)"""
-		cls.bar_length = length
+	def __update_bar_length(self, bar):
+		terminal_lenght = os.get_terminal_size()[0]
+		external_bar_length = int(len(bar)-self.__bar_length)
+		self.__bar_length = terminal_lenght-external_bar_length-1
 
 	def __per_sec(self):
-		prev = time.time()
+		prev = time()
 		ps = (1 / (prev - self.__start)) if self.__start != 0 else 0
 		self.__recently.pop(0) if len(self.__recently) >= 100 else None
 		self.__recently.append(ps) if ps <= 100 else None
 		self.__start = prev
 		return np.mean(self.__recently)
 		
-	def __time_calc(self):
+	def __time_left(self):
 		ps = self.__per_sec()
 		sec_left = round((self.total - self.current) / ps) if ps != 0 else 0
 		time_format = datetime.timedelta(seconds=sec_left)
 		return time_format
 
+	def __time_total(self):
+		sec_total = round(time()-self.__begin_time)
+		time_format = datetime.timedelta(seconds=sec_total)
+		return time_format
+
 	def __bar(self):
 		percent = self.current / self.total
-		completed = int(percent * Progress.bar_length) * '█'
-		padding = int(Progress.bar_length - len(completed)) * '.'
-		prog_line = f'Progress: {self.current}/{self.total} |{completed}{padding}| {int(percent*100)}% in {self.__time_calc()}s     '
-		return prog_line
+		completed = int(percent * self.__bar_length) * '█'
+		padding = int(self.__bar_length - len(completed)) * '.'
+		return f'Progress: {self.current}/{self.total} |{completed}{padding}| {int(percent*100)}% in {self.__time_left()}s > {self.__time_total()}s '
 	
 	def update(self):
 		"""Finish current state and move to next state"""
 		self.current += 1
+		bar = self.__bar()
 		ending = '\n' if self.current == self.total else '\r'
-		print(self.__bar(), end=ending)
+		self.__update_bar_length(bar)
+		print(bar, end=ending)
 
 
 def crop_background(image, grayscale=False):
@@ -73,3 +80,14 @@ def load_config(config_file: str='config.yaml'):
 	with open(config_file) as f:
 		config = yaml.full_load(f)
 	return config
+
+def measure(func):
+	@wraps(func)
+	def _time(*args, **kwargs):
+		start = time()
+		try:
+			return func(*args, **kwargs)
+		finally:
+			end_ = time() - start
+			print(f"Done {func.__name__} in {round(end_, 2)}s")
+	return _time
