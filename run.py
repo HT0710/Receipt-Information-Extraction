@@ -16,16 +16,19 @@ import torch
 
 
 class Pipeline:
-	def __init__(self, args):
+	def __init__(self, args, config):
 		self.input = args.input
 		self.output = args.output
+		self.size = config['image_size']
 		self.data = {
 			'input': [],
 			'output': []
 		}
 		self.gpu = args.gpu
 		self.text_detector = None
+		self.extractor_model = config['vietocr_model']
 		self.text_extractor = None
+		self.incline = config['incline']
 
 	@measure
 	def prepare(self):
@@ -50,9 +53,8 @@ class Pipeline:
 
 	def load_image(self, image_path):
 		image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-		height = cfg['image_size']
-		width = int(image.shape[1]*(height/image.shape[0]))
-		return cv2.resize(image, (width, height))
+		width = int(image.shape[1]*(self.size/image.shape[0]))
+		return cv2.resize(image, (width, self.size))
 
 	def remove_background(self, image):
 		bg_removed = remove(image)
@@ -60,7 +62,7 @@ class Pipeline:
 
 	@measure
 	def gpu_config(self):
-		ocr_config = Config.load_config_from_name(cfg['vietocr_model'])
+		ocr_config = Config.load_config_from_name(self.extractor_model)
 		if (self.gpu != 0) and torch.cuda.is_available():
 			self.text_detector = Craft('cuda')
 			ocr_config['device'] = 'cuda' if self.gpu == -1 else f'cuda:{self.gpu-1}'
@@ -85,21 +87,21 @@ class Pipeline:
 		vietocr = self.text_extractor
 		inline = {'prev_height': 0, 'prev_line': -1, }
 		informations = []
-		padding = round(cfg['image_size']*0.002)
-		for box in bboxes:
+		padding = round(self.size*0.002)
+		for i, box in enumerate(bboxes):
 			for px in [padding, padding*0.5, padding*0.25, 0]:
 				x1 = int(box[0][0] - px)
-				y1 = int(box[1][1] - px)
+				y1 = int(box[0][1] - px)
 				x2 = int(box[2][0] + px)
 				y2 = int(box[2][1] + px)
 				arr_img = _image.copy()[y1:y2, x1:x2]  # crop image
 				if not 0 in [x for x in arr_img.shape]:
 					break
 			
-			image = Image.fromarray(arr_img)
-			detected = vietocr.predict(image)
+			img_box = Image.fromarray(arr_img)
+			detected = vietocr.predict(img_box)
 
-			if cfg['incline']:
+			if self.incline:
 				current_height = sum(y[1] for y in box )/4
 				per_diff = abs(1-inline['prev_height']/current_height)
 				if per_diff < 0.015:
@@ -127,39 +129,40 @@ class Pipeline:
 	def save_text(self, output, infomation):
 		if not output_exist(self.output):
 			os.mkdir(self.output)
-		with open(f'{output}.txt', 'w+') as f:
+		with open(f'{output}.txt', 'w+', encoding="utf-8") as f:
 			for line in infomation:
 				f.write(' | '.join(line) + '\n')
 
 
 @measure
 def main(args):
-	pl = Pipeline(args)
+	pl = Pipeline(args, cfg)
 
 	data = pl.prepare()
 
 	start = time()
-	if args.multicore != 0:
+	if args.multicore in [0, 1]:
+		print(f'Multicore will not be used')
+		bg_rv_imgs = []
+		for image_path in data['input']:
+			load_img = pl.load_image(image_path)
+			bg_rv_imgs.append(pl.remove_background(load_img))
+	else:
 		num_cpus = psutil.cpu_count(logical=False) if args.multicore == -1 else args.multicore
 		print(f'Maximum {num_cpus} cpu core will be used')
 		with Pool(processes=num_cpus) as pool:
 			load_imgs = pool.map(pl.load_image, data['input'])
 			bg_rv_imgs = pool.map(pl.remove_background, load_imgs)
-	else:
-		bg_rv_imgs = []
-		for image_path in data['input']:
-			load_img = pl.load_image(image_path)
-			bg_rv_imgs.append(pl.remove_background(load_img))
 	print(f'Done remove background in {round(time()-start, 2)}s')
 
 	pl.gpu_config()
 	
-	print('Start extract info:')
+	print('Start extract info')
 	prog_bar = Progress(bg_rv_imgs)
 	for output, image in zip(data['output'], bg_rv_imgs):
 		rotated, bboxes = pl.rotate(image)
-		pl.save_image(rotated, bboxes, output) if cfg['save_image'] else None
 		info = pl.extract_info(rotated, bboxes)
+		pl.save_image(rotated, bboxes, output) if cfg['save_image'] else None
 		pl.save_text(output, info) if cfg['save_text'] else None
 		prog_bar.update()
 	print(f"Result has been saved to '{args.output}'")
