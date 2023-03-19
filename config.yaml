@@ -1,10 +1,11 @@
 run:
-  input: "data/test/mcocr_public_145013atlmq.jpg"
+  input: "data/raw/mcocr_public_145013atlmq.jpg"
   output: "result"
-  gpu: 1  # use which gpu to run ( 0 for cpu & -1 for all )
+  gpu: -1  # use which gpu to run ( 0 for cpu & -1 for all )
   image_size: 1920
-  multicore: -1  # maximum of cpu core can use ( -1 for all )
+  multicore: -1  # maximum of cpu core can use ( -1 for all ). Note: only impact on 2 or more image
   vietocr_model: "vgg_seq2seq"  # vgg_transformer much slower than vgg_seq2seq but a bit more accuracy
-  incline: True  # incline text output
+  incline: True  # try to make text output keep it line
   save_image: True
   save_text: True
+  save_box: True  # save box of text that detected
