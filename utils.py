@@ -16,17 +16,27 @@ def output_exist(output_path):
 class Progress:
 	"""Progress bar"""
 	def __init__(self, i_list):
+		self.list = i_list
 		self.total = len(i_list)
-		self.current = 0
-		self.__bar_length = 33
+		self.current = -1
+		self.__bar_length = 0
 		self.__begin_time = time()
 		self.__start = 0
 		self.__recently = []
 	
+	def __iter__(self):
+		return self
+		
+	def __next__(self):
+		self.update()
+		if self.current < self.total:
+			return self.list[self.current]
+		raise StopIteration
+	
 	def __update_bar_length(self, bar):
 		terminal_lenght = os.get_terminal_size()[0]
 		external_bar_length = int(len(bar)-self.__bar_length)
-		self.__bar_length = terminal_lenght-external_bar_length-1
+		self.__bar_length = terminal_lenght-external_bar_length-2
 
 	def __per_sec(self):
 		prev = time()

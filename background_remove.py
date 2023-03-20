@@ -14,8 +14,7 @@ def main():
 	
 	files = os.listdir(input_folder)
 	
-	prog_bar = Progress(files)
-	for filename in files:
+	for filename in Progress(files):
 		input_path = os.path.join(input_folder, filename)
 		output_path = os.path.join(output_folder, filename)
 		
@@ -27,7 +26,6 @@ def main():
 			output = crop_background(bg_removed, grayscale=True)
 
 			io.imsave(output_path, output)
-		prog_bar.update()
 		
 
 if __name__ == '__main__':
