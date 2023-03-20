@@ -15,7 +15,7 @@ detector = Predictor(config)
 
 @measure
 def main():
-	img_path = 'data/rotated/bhx_5bcac72d2869ee37b778.jpg'
+	img_path = 'data/rotated/mcocr_public_145014jkafe.jpg'
 
 	_image = io.imread(img_path)
 
