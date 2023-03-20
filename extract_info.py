@@ -25,17 +25,12 @@ def main():
 	prev_line = -1
 	information = []
 	
-	padding = round(_image.shape[1]*0.002)
 	for box in Progress(bboxes):
-		for px in [padding, padding*0.5, padding*0.25, 0]:
-			x1 = int(box[0][0]-px)
-			y1 = int(box[0][1]-px)
-			x2 = int(box[2][0]+px)
-			y2 = int(box[2][1]+px)
-			
-			arr_img = _image.copy()[y1:y2, x1:x2] # crop image
-			if 0 in [x for x in arr_img.shape]:
-				continue
+		x1 = int(box[0][0] if (box[0][0] < box[3][0]) else box[3][0])
+		y1 = int(box[0][1] if (box[0][1] < box[1][1]) else box[1][1])
+		x2 = int(box[2][0] if (box[2][0] > box[1][0]) else box[1][0])
+		y2 = int(box[2][1] if (box[2][1] > box[3][1]) else box[3][1])
+		arr_img = _image.copy()[y1:y2, x1:x2] # crop image
 		
 		try:
 			image = Image.fromarray(arr_img)
