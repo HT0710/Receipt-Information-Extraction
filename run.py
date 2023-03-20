@@ -74,9 +74,8 @@ class Pipeline:
 		img_2 = rotate_90.run(img_1, bboxes)
 		bboxes = self.text_detector(img_2)
 		img_3, is_aligned = align_box(img_2, bboxes, skew_threshold=1)
-		bboxes = self.text_detector(img_3) if is_aligned else bboxes
 		img_4, is_rotated = rotate_180.run(img_3)
-		bboxes = self.text_detector(img_4) if is_rotated else bboxes
+		bboxes = self.text_detector(img_4) if (is_aligned or is_rotated) else bboxes
 		img_data['image'] = img_4
 		img_data['bboxes'] = bboxes
 		return img_data
@@ -164,13 +163,11 @@ def main(args):
 	pl.prepare_model()
 	
 	print('Start extract info')
-	prog_bar = Progress(bg_removed)
-	for img_data in bg_removed:
+	for img_data in Progress(bg_removed):
 		img_data = pl.rotate(img_data)
 		img_data = pl.extract_info(img_data)
 		pl.save_text(img_data) if config['save_text'] else None
 		pl.save_image(img_data) if config['save_image'] else None
-		prog_bar.update()
 	print(f"Result has been saved to '{config['output']}'")
 
 
