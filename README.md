@@ -125,7 +125,7 @@ python extract_info.py
 You can find the paper here: [RIE](https://github.com/HT0710/Receipt-Information-Extraction/tree/main/example/RIE.pdf)
 
 ## License
-This project is licensed under the MIT License. See LICENSE for more details.
+This project is licensed under the MIT License. See [LICENSE](https://github.com/HT0710/Receipt-Information-Extraction/blob/main/LICENSE) for more details.
 
 ## References
 - [Rembg](https://github.com/danielgatis/rembg) - [danielgatis](https://github.com/danielgatis)
