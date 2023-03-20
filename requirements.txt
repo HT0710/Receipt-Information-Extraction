@@ -9,4 +9,3 @@ imutils
 PyYAML
 einops
 gdown
-psutil

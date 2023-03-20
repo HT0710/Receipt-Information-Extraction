@@ -1,9 +1,7 @@
 import os
 from skimage import io
-from rotation import rotate_90, rotate_180
-from utils import output_exist, Progress, crop_background, measure
-from rotation.CRAFT import model
-from rotation.utils import Craft, align_box
+from utils import Progress, crop_background, measure
+from rotation import model, Craft, align_box, rotate_90, rotate_180
 
 input_folder = 'data/background_removed'
 output_folder = 'data/rotated'
@@ -12,7 +10,7 @@ craft = Craft('cuda')  # 'cpu' to use cpu
 
 @measure
 def main():
-	if not output_exist(output_folder):
+	if not os.path.exists(output_folder):
 		os.mkdir(output_folder)
 
 	files = os.listdir(input_folder)
@@ -21,7 +19,7 @@ def main():
 		input_path = os.path.join(input_folder, filename)
 		output_path = os.path.join(output_folder, filename)
 		
-		if not output_exist(output_path):
+		if not os.path.exists(output_path):
 			img_0 = io.imread(input_path)
 			
 			img_1 = model.loadImage(img_0)  # load image for craft

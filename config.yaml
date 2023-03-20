@@ -1,11 +1,11 @@
 run:
-  input: "data/raw/mcocr_public_145013atlmq.jpg"
-  output: "result"
+  input: "data/test"  # path can be an image or folder
+  output: "result"  # output path
   gpu: -1  # use which gpu to run ( 0 for cpu & -1 for all )
-  image_size: 1920
-  multicore: -1  # maximum of cpu core can use ( -1 for all ). Note: only impact on 2 or more image
+  image_size: 1920  # this will be image height, width will scale down relatively (ratio)
+  multiprocessing: -1  # maximum of cpu can use ( -1 for 80%, more can crash your system). Note: only impact on 2 or more image
   vietocr_model: "vgg_seq2seq"  # vgg_transformer much slower than vgg_seq2seq but a bit more accuracy
   incline: True  # try to make text output keep it line
-  save_image: True
-  save_text: True
+  save_image: True  # save image output
+  save_text: True  # save information output
   save_box: True  # save box of text that detected
