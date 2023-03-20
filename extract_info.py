@@ -1,7 +1,6 @@
 from skimage import io
-from rotation.CRAFT import model
-from rotation.utils import Craft
-from text_extraction.vietocr import Config, Predictor
+from rotation import model, Craft
+from text_extraction import Config, Predictor
 from PIL import Image
 from utils import measure, Progress
 

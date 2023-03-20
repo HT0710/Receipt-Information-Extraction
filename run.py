@@ -1,5 +1,5 @@
 import argparse
-from utils import load_config, crop_background, output_exist, measure, Progress
+from utils import load_config, crop_background, measure, Progress
 import cv2
 import os
 from time import time
@@ -7,10 +7,8 @@ from PIL import Image
 from multiprocessing import Pool
 import psutil
 from rembg import remove
-from rotation.CRAFT import model
-from rotation.utils import Craft, align_box
-from rotation import rotate_90, rotate_180
-from text_extraction.vietocr import Config, Predictor
+from rotation import model, Craft, align_box, rotate_90, rotate_180
+from text_extraction import Config, Predictor
 import numpy as np
 import torch
 
@@ -33,7 +31,7 @@ class Pipeline:
 		if not os.path.exists(self.config["input"]):
 			print(f'[Error] No such file or directory: {self.config["input"]}')
 			os._exit(0)
-		if not output_exist(self.config["output"]):
+		if not os.path.exists(self.config["output"]):
 			os.mkdir(self.config["output"])
 
 		if os.path.isfile(self.config["input"]):
@@ -102,7 +100,7 @@ class Pipeline:
 
 			if self.config['save_box']:
 				box_output = f"{self.config['output']}/{img_data['name']}"
-				os.mkdir(box_output) if not output_exist(box_output) else None
+				os.mkdir(box_output) if not os.path.exists(box_output) else None
 				img_box.save(f'{box_output}/{i}.jpg')
 
 			if self.config['incline']:

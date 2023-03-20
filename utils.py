@@ -8,11 +8,6 @@ import yaml
 from functools import wraps
 
 
-def output_exist(output_path):
-	"""Check if output is already exist"""
-	return os.path.exists(output_path)
-
-
 class Progress:
 	"""Progress bar"""
 	def __init__(self, i_list):
