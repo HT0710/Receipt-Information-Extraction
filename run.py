@@ -172,7 +172,7 @@ if __name__ == '__main__':
 	args.add_argument('-i', '--input', type=str, help='Image path or Folder path (Default: data/test/test.jpg)')
 	args.add_argument('-o', '--output', type=str, help='Output folder path (Default: result/)')
 	args.add_argument('-g', '--gpu', type=int, help='Use which gpu | 0 for cpu | -1 for all (Default: -1)')
-	args.add_argument('-mp', '--multiprocessing', type=int, help='Maximum of cpu can use | -1 for 80% (Default: -1)')
+	args.add_argument('-mp', '--multiprocessing', type=int, help='Maximum of cpu can use | -1 for 80 percent (Default: -1)')
 	args = args.parse_args()
 
 	main(args)
