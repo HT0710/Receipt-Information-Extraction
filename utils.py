@@ -11,7 +11,7 @@ from functools import wraps
 class Progress:
 	"""Progress bar"""
 	def __init__(self, i_list):
-		self.list = i_list
+		self.__list = i_list
 		self.total = len(i_list)
 		self.current = -1
 		self.__bar_length = 0
@@ -23,9 +23,9 @@ class Progress:
 		return self
 		
 	def __next__(self):
-		self.update()
+		self.__update()
 		if self.current < self.total:
-			return self.list[self.current]
+			return self.__list[self.current]
 		raise StopIteration
 	
 	def __update_bar_length(self, bar):
@@ -58,7 +58,7 @@ class Progress:
 		padding = int(self.__bar_length - len(completed)) * '.'
 		return f'Progress: {self.current}/{self.total} |{completed}{padding}| {int(percent*100)}% in {self.__time_left()}s > {self.__time_total()}s '
 	
-	def update(self):
+	def __update(self):
 		"""Finish current state and move to next state"""
 		self.current += 1
 		bar = self.__bar()
@@ -80,13 +80,19 @@ def crop_background(image, grayscale=False):
 	return output
 
 
-def load_config(config_file: str='config.yaml'):
+def load_config(config_name, args=None):
 	"""Load config file"""
-	with open(config_file) as f:
-		config = yaml.full_load(f)
+	with open('config.yaml') as f:
+		config = yaml.full_load(f)[config_name]
+	if args is not None:
+		for arg, value in args.__dict__.items():
+			if value is not None:
+				config[arg] = value
 	return config
+	
 
 def measure(func):
+	"""Measure the runtime"""
 	@wraps(func)
 	def _time(*args, **kwargs):
 		start = time()
