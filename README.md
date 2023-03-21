@@ -54,7 +54,7 @@ conda activate rie
 - opencv-python = 4.7.0.72
 - scikit-learn = 1.2.1
 - scikit-image = 0.19.3
-- scipy= = .9.3
+- scipy = 1.9.3
 - imutils = 0.5.4
 - PyYAML = 6.0
 - einops = 0.6.0
