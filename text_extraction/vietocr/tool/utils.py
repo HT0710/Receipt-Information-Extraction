@@ -5,32 +5,12 @@ import numpy as np
 import uuid
 import requests
 import tempfile
-from tqdm import tqdm
+from utils import download_weight
 
 def download_weights(uri, cached=None, md5=None, quiet=False):
     if uri.startswith('http'):
-        return download(url=uri, quiet=quiet)
+        return download_weight(uri, url=True)
     return uri
-
-def download(url, quiet=False):
-    filename = url.split('/')[-1]
-    full_path = os.path.join('weights', filename)
-    
-    if os.path.exists(full_path):
-        return full_path
-
-    os.mkdir('weights') if not os.path.exists('weights') else None
-    print(f'Model weight not found. Start download into "{full_path}":')    
-    
-    with requests.get(url, stream=True) as r:
-        r.raise_for_status()
-        with open(full_path, 'wb') as f:
-            for chunk in tqdm(r.iter_content(chunk_size=8192)):
-                # If you have chunk encoded response uncomment if
-                # and set chunk_size parameter to None.
-                #if chunk:
-                f.write(chunk)
-    return full_path
 
 def download_config(id):
     url = 'https://raw.githubusercontent.com/pbcquoc/vietocr/master/config/{}'.format(id)

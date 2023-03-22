@@ -6,13 +6,14 @@ from skimage import io
 import cv2
 import yaml
 from functools import wraps
+import requests
 
 
 class Progress:
 	"""Progress bar"""
 	def __init__(self, i_list):
-		self.__list = i_list
-		self.total = len(i_list)
+		self.__list = list(i_list)
+		self.total = len(self.__list)
 		self.current = -1
 		self.__bar_length = 0
 		self.__begin_time = time()
@@ -102,3 +103,31 @@ def measure(func):
 			end_ = time() - start
 			print(f"Done {func.__name__} in {round(end_, 2)}s")
 	return _time
+
+
+def download_weight(model_name, url=False):
+	models = {
+		'rotate_180.pkl': "1laOUDHBEOtazXM20x2DCXIZ7zBH4uWWB",
+		'craft_mlt_25k.pth': "1fBUOVdtv4r6UM4rOTjaZpamcs3UIwzj_",
+		'craft_refiner_CTW1500.pth': "1QC0hXbyNX-yW69g42RR0ZB74L6jqdRDg",
+	}
+	if not url:
+		url = f"https://drive.google.com/uc?export=download&id={models[model_name]}"
+	else:
+		url = model_name
+		model_name = model_name.split('/')[-1]
+	os.mkdir('weights') if not os.path.exists('weights') else None
+	weight_path = f'weights/{model_name}'
+	if os.path.exists(weight_path):
+		return weight_path
+	print(f"Weight '{model_name}' not found, requesting...", end='\r')
+	with requests.get(url, stream=True) as r:
+		r.raise_for_status()
+		weight_folder = 'weights'
+		os.mkdir(weight_folder) if not os.path.exists(weight_folder) else None
+		weight_path = f'{weight_folder}/{model_name}'
+		with open(weight_path, 'wb') as f:
+			print(f"Download weight into '{weight_path}'"+' '*10)
+			for chunk in Progress(r.iter_content(chunk_size=1000)):
+				f.write(chunk)
+	return weight_path

@@ -4,13 +4,11 @@ from collections import OrderedDict
 import cv2
 import numpy as np
 import torch
-import torch.backends.cudnn as cudnn
 from torch.autograd import Variable
 
 from rotation.CRAFT import model
+from utils import download_weight
 
-net_pretrained = 'rotation/CRAFT/weights/craft_mlt_25k.pth'
-refine_pretrained = 'rotation/CRAFT/weights/craft_refiner_CTW1500.pth'
 
 def copyStateDict(state_dict):
     if list(state_dict.keys())[0].startswith("module"):
@@ -90,7 +88,10 @@ def setup(device):
     refine_net = model.RefineNet()
     cuda = True if (device == 'cuda' and torch.cuda.is_available()) else False
     
-    net = model_setup(net, net_pretrained, cuda)
-    refine_net = model_setup(refine_net, refine_pretrained, cuda)
+    net_model = download_weight('craft_mlt_25k.pth')
+    refine_model = download_weight('craft_refiner_CTW1500.pth')
+
+    net = model_setup(net, net_model, cuda)
+    refine_net = model_setup(refine_net, refine_model, cuda)
 
     return net, refine_net, cuda
