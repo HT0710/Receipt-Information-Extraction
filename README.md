@@ -23,6 +23,7 @@ The dataset is contain more than 1500 receipts from the competition and our coll
   - [Citations](#citations)
   - [License](#license)
   - [References](#references)
+  - [Contact](#contact)
 
 
 ## Introduction
@@ -32,17 +33,36 @@ Receipt Information Extraction (RIE) is a task that involves extracting structur
 
 
 ## Install
-Clone with git or download the project here: [RIE](https://github.com/HT0710/Receipt-Information-Extraction/archive/refs/heads/main.zip)
+Download the project
+1. Click here: [RIE](https://github.com/HT0710/Receipt-Information-Extraction/archive/refs/heads/main.zip)
+2. Unzip the `main.zip` file
+3. Navigate into the project folder:
 ```bash
+cd path-to-the-project-folder-downloaded
+```
+
+
+Clone with git: **(NOT RECOMMENDED)**
+```bash
+# very slow download speed
 git clone https://github.com/HT0710/Receipt-Information-Extraction
 cd Receipt-Information-Extraction
+```
+
+Using `wget` on Linux:
+```bash
+# faster download speed
+wget https://github.com/HT0710/Receipt-Information-Extraction/archive/refs/heads/main.zip
+unzip main.zip
+cd Receipt-Information-Extraction-main
 ```
 
 ### Version
 - **`Python 3.8`**
 
-Using conda:
+Using Conda:
 ```bash
+# Installation: https://docs.conda.io/en/latest/miniconda.html
 conda create -n rie python=3.8
 conda activate rie
 ```
@@ -78,7 +98,7 @@ python run.py -h
 - -g: Which gpu to run | 0 for cpu | -1 for all (Default: -1)
 - -mp: Maximum of cpu can use | -1 for 80% of your cpu (Default: -1)
 
-Note: Max 100% your cpu may run out of memory or worst crash your system 
+Caution: Using 100% of your cpu may crash your system!
 
 **Example:**
 ```bash
@@ -132,3 +152,10 @@ This project is licensed under the MIT License. See [LICENSE](https://github.com
 - [CRAFT-pytorch](https://github.com/clovaai/CRAFT-pytorch) - [clovaai](https://github.com/clovaai)
 - [VietOCR](https://github.com/pbcquoc/vietocr) - [pbcquoc](https://github.com/pbcquoc)
 - [PICK-pytorch](https://github.com/wenwenyu/PICK-pytorch) - [wenwenyu](https://github.com/wenwenyu)
+  
+## Contact
+Open an issue: [new issue](https://github.com/HT0710/Receipt-Information-Extraction/issues/new)
+
+Mail: pthung7102002@gmail.com
+
+---
