@@ -38,7 +38,7 @@ Download the project
 2. Unzip the `main.zip` file
 3. Navigate into the project folder:
 ```bash
-cd path-to-the-project-folder-downloaded
+cd path-to-the-project-folder
 ```
 
 
