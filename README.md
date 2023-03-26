@@ -1,9 +1,12 @@
-# Receipt Information Extraction (RIE)
-Project completed on 21/03/2023
+# <p align="center">Receipt Information Extraction (RIE)</p>
 
-This project is inspired by MC-OCR, more information about this competition can access [here](https://www.rivf2021-mc-ocr.vietnlp.com/).
+**Project completed on 21/03/2023**
+
+This project is inspired by MC-OCR, more information about this competition can access here: [Link](https://www.rivf2021-mc-ocr.vietnlp.com/)
+
 The dataset is contain more than 1500 receipts from the competition and our collected, can be download here: [Google Drive](https://drive.google.com/file/d/1W_wIY9LatOfpxi7oO3B9h-6JxdgC-jWG/view?usp=share_link)
 
+![ex_2](example/ex_2.png)
 
 ---
 ### Table of Contents
@@ -82,6 +85,7 @@ conda activate rie
 ```bash
 pip install -r requirements.txt
 ```
+Note: CUDA is required if you want to use GPU
 
 ## Usage
 ### One-time run
@@ -139,7 +143,6 @@ python extract_info.py
 
 ## Results
 ![ex_1](example/ex_1.png)
-![ex_2](example/ex_2.png)
 
 ## Citations
 You can find the paper here: [RIE](https://github.com/HT0710/Receipt-Information-Extraction/tree/main/example/RIE.pdf)
@@ -154,7 +157,7 @@ This project is licensed under the MIT License. See [LICENSE](https://github.com
 - [PICK-pytorch](https://github.com/wenwenyu/PICK-pytorch) - [wenwenyu](https://github.com/wenwenyu)
   
 ## Contact
-Open an issue: [new issue](https://github.com/HT0710/Receipt-Information-Extraction/issues/new)
+Open an issue: [New issue](https://github.com/HT0710/Receipt-Information-Extraction/issues/new)
 
 Mail: pthung7102002@gmail.com
 
