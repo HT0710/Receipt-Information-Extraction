@@ -9,9 +9,9 @@ The dataset is contain more than 1500 receipts from the competition and our coll
 ![ex_2](example/ex_2.png)
 
 ---
-### Table of Contents
+## Table of Contents
 - [Receipt Information Extraction (RIE)](#receipt-information-extraction-rie)
-    - [Table of Contents](#table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
   - [Install](#install)
     - [Version](#version)
@@ -85,7 +85,7 @@ conda activate rie
 ```bash
 pip install -r requirements.txt
 ```
-Note: CUDA is required if you want to use GPU
+Note: CUDA is required if you want to use GPU. You can follow my instructions [here](https://gist.github.com/HT0710/639ec6ad96f9c46e0d209ba2e50ee168)
 
 ## Usage
 ### One-time run
