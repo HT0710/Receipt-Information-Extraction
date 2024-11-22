@@ -4,7 +4,7 @@
 
 This project is inspired by MC-OCR, more information about this competition can access here: [Link](https://www.rivf2021-mc-ocr.vietnlp.com/)
 
-The dataset is contain more than 1500 receipts from the competition and our collected, can be download here: [Google Drive](https://drive.google.com/file/d/1W_wIY9LatOfpxi7oO3B9h-6JxdgC-jWG/view?usp=share_link)
+The dataset is contain more than 1500 receipts from the competition and our collected.
 
 ![ex_2](example/ex_2.png)
 
